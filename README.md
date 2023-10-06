@@ -1,6 +1,6 @@
 # Capacitor Physical Properties Analyzer
 
-![Capacitor Banner](https://www.researchgate.net/profile/Kabir-Oyedotun/publication/334446617/figure/fig2/AS:780225474465792@1563031657590/A-schematic-diagram-of-a-the-design-of-a-parallel-plate-capacitor-adapted-from.ppm)
+![Capacitor Banner](https://c1.wallpaperflare.com/preview/442/803/728/electronics-capacitor-component-circuit.jpg)
 
 This application is crafted to visualize and analyze the physical properties of three distinct capacitor types: parallel plate, spherical, and cylindrical. Proudly developed by **Madeline Castro** and **Xavier López**, passionate physics students from Universidad del Valle de Guatemala.
 
