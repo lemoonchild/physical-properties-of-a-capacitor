@@ -2,7 +2,7 @@
 
 ![Capacitor Banner](https://c1.wallpaperflare.com/preview/442/803/728/electronics-capacitor-component-circuit.jpg)
 
-This application is crafted to visualize and analyze the physical properties of three distinct capacitor types: parallel plate, spherical, and cylindrical. Proudly developed by **Madeline Castro** and **Xavier López**, passionate physics students from Universidad del Valle de Guatemala.
+This application is crafted to visualize and analyze the physical properties of three distinct capacitor types: parallel plate, spherical, and cylindrical. Proudly developed by **Madeline Castro** and **Xavier López**, passionate CS & TI and physics students from Universidad del Valle de Guatemala.
 
 ## Overview
 
