@@ -192,25 +192,31 @@ def calculateParallelPlates(plateLength, plateWidth, platesD, dielectricDist,  e
         equivalentCapacitance = initialCapacitanceHalf + dielectricCapacitance
         capacitorCharge = equivalentCapacitance * entVoltage
         capacitorEnergy = (0.5) * equivalentCapacitance * (entVoltage*entVoltage)
-        print(equivalentCapacitance, capacitorCharge, capacitorEnergy)
 
         freeChargeAir = (capacitorCharge/(1+dielectricConstant))*(1/(plateLength*plateWidth))
         freeChargeDielectric = freeChargeAir * dielectricConstant
         boundChargeDielectric = freeChargeDielectric * (1-(1/dielectricConstant))
 
+        print("\n\nCapacitancia Equivalente: " , equivalentCapacitance , "Carga del Capacitor: " , capacitorCharge , ", Energia del Capacitor" , capacitorEnergy)
+        print("Carga Libre Aire: " , freeChargeAir , ", Carga Libre Dielectrico: " , freeChargeDielectric , "Carga Ligada Dielectrico: " , boundChargeDielectric)
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
         capacitorCharge = dielectricCapacitance * entVoltage
         capacitorEnergy = (0.5) * dielectricCapacitance * (entVoltage*entVoltage)
-        print(dielectricCapacitance, capacitorCharge, capacitorEnergy)
+
         freeChargeDielectric = dielectricConstant*(capacitorCharge/(1+dielectricConstant))*(1/(plateLength*plateWidth))
         boundChargeDielectric = freeChargeDielectric * (1-(1/dielectricConstant))
+        
+        print("\n\nCapacitancia Equivalente: " , dielectricCapacitance , "Carga del Capacitor: " , capacitorCharge , ", Energia del Capacitor" , capacitorEnergy)
+        print("Carga Libre Dielectrico: " , freeChargeDielectric , "Carga Ligada Dielectrico: " , boundChargeDielectric)
+
 
     else:
         capacitorCharge = initialCapacitance * entVoltage
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        print(initialCapacitance, capacitorCharge, capacitorEnergy)    
+        print("\n\nCapacitancia Equivalente: ", initialCapacitance, ", Carga del Capacitor: ", capacitorCharge, ", Energia del Capacitor: ", capacitorEnergy)
+    
 
 def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
 
@@ -232,6 +238,10 @@ def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
 
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
+        
+        print("\n\nCapacitancia Equivalente", equivalentCapacitance, "Carga del Capacitor", capacitorCharge, "Energia Almacenada", capacitorEnergy)
+        print("Carga Libre Aire Ra", freeChargeAir_smallRadius, "Carga Libre Aire Rb", freeChargeAir_bigRadius, "Carga Libre Dielectrico Ra", freeChargeDielectric_smallRadius)
+        print("Carga Libre Dielectric Rb", freeChargeDielectric_bigRadius, "Carga Ligada Dielectrico Ra", boundChargeDielectric_smallRadius, "Carga Ligada Dielectrico Rb", boundChargeDielectric_bigRadius)
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
@@ -247,10 +257,16 @@ def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
 
+        print("\n\nCapacitancia Equivalente", dielectricCapacitance, "Carga del Capacitor", capacitorCharge, "Energia Almacenada", capacitorEnergy)
+        print("Carga Libre Dielectrico Ra", freeChargeDielectric_smallRadius, "Carga Libre Dielectrico Rb", freeChargeDielectric_bigRadius)
+        print("Carga Ligada Dielectrico Ra", boundChargeDielectric_smallRadius, "Carga Ligada Dielectrico Rb", boundChargeDielectric_bigRadius)
+
+
+
     else:
         capacitorCharge = initialCapacitance * entVoltage
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        print(initialCapacitance, capacitorCharge, capacitorEnergy)
+        print("\n\nCapacitancia Equivalente", initialCapacitance, "Carga del Capacitor", capacitorCharge, "Energia Almacenada", capacitorEnergy)
 
 def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage):
     
@@ -263,7 +279,6 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
         equivalentCapacitance = initialCapacitanceHalf + dielectricCapacitance
         capacitorCharge = equivalentCapacitance * entVoltage
         capacitorEnergy = (0.5) * equivalentCapacitance * (entVoltage*entVoltage)
-        print(equivalentCapacitance, capacitorCharge, capacitorEnergy)
 
         freeChargeAir_smallRadius = (capacitorCharge/(1+dielectricConstant))*(1/(PI*innerRad*cylLength))
         freeChargeAir_bigRadius = (capacitorCharge/(1+dielectricConstant))*(1/(PI*outerRad*cylLength))
@@ -272,6 +287,11 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
 
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
+        
+        print("\n\nCapacitancia Equivalente", equivalentCapacitance, "Carga del Capacitor", capacitorCharge, "Energia del Capacitor", capacitorEnergy)
+        print("Carga Libre Aire Ra", freeChargeAir_smallRadius, "Carga Libre Aire Rb", freeChargeAir_bigRadius, "Carga Libre Dielectrico Ra", freeChargeDielectric_smallRadius)
+        print("Carga Libre Dielectric Rb", freeChargeDielectric_bigRadius, "Carga Ligada Dielectrico Ra", boundChargeDielectric_smallRadius, "Carga Ligada Dielectrico Rb", boundChargeDielectric_bigRadius)
+
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
@@ -286,10 +306,14 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
 
+        print("\n\nCapacitancia Equivalente", dielectricCapacitance, "Carga del Capacitor", capacitorCharge, "Energia del Capacitor", capacitorEnergy)
+        print("Carga Libre Dielectrico Ra", freeChargeDielectric_smallRadius, "Carga Libre Dielectrico Rb", freeChargeDielectric_bigRadius)
+        print("Carga Ligada Dielectrico Ra", boundChargeDielectric_smallRadius, "Carga Ligada Dielectrico Rb", boundChargeDielectric_bigRadius)
+
     else:
         capacitorCharge = initialCapacitance * entVoltage
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        print(initialCapacitance, capacitorCharge, capacitorEnergy)
+        print("\n\nCapacitancia Equivalente", initialCapacitance, "Carga del Capacitor", capacitorCharge, "Energia Almacenada", capacitorEnergy)
 
     
 
