@@ -13,111 +13,142 @@ from tkinter import ttk
 import numpy as np  
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # ---------------------------------------------------------------------------
 
-def obtener_datos(tipo_var, largo_entry, ancho_entry, radio_ext_entry, radio_int_entry, cil_radio_ext_entry, cil_radio_int_entry, cil_largo_entry, voltaje_entry, diel_var, cobertura_var):
-    tipo_capacitor = tipo_var.get()
-    if tipo_capacitor == "Paralelo":
-        largo = float(largo_entry.get())
-        ancho = float(ancho_entry.get())
-        # Aquí puedes agregar tus cálculos para el capacitor paralelo
-    elif tipo_capacitor == "Esférico":
-        radio_exterior = float(radio_ext_entry.get())
-        radio_interior = float(radio_int_entry.get())
-        # Aquí puedes agregar tus cálculos para el capacitor esférico
-    elif tipo_capacitor == "Cilíndrico":
-        cil_radio_exterior = float(cil_radio_ext_entry.get())
-        cil_radio_interior = float(cil_radio_int_entry.get())
-        cil_largo = float(cil_largo_entry.get())
-        # Aquí puedes agregar tus cálculos para el capacitor cilíndrico
+def getData(typeVar, canvas, lengthEntry, widthEntry, outerRadiusEntry, innerRadiusEntry, cylOuterRadiusEntry, cylInnerRadiusEntry, cylLengthEntry, voltageEntry, dielecVar, coverageVar):
+    capacitorType = typeVar.get()
+    if capacitorType == "Paralelo":
+        length = float(lengthEntry.get())
+        width = float(widthEntry.get())
+        # You can add your calculations for the parallel capacitor here
+    elif capacitorType == "Esférico":
+        outerRadius = float(outerRadiusEntry.get())
+        innerRadius = float(innerRadiusEntry.get())
+        # You can add your calculations for the spherical capacitor here
+    elif capacitorType == "Cilíndrico":
+        cylOuterRadius = float(cylOuterRadiusEntry.get())
+        cylInnerRadius = float(cylInnerRadiusEntry.get())
+        cylLength = float(cylLengthEntry.get())
+        # You can add your calculations for the cylindrical capacitor here
 
-    voltaje = float(voltaje_entry.get())
-    es_dielelectrico = diel_var.get()
-    if es_dielelectrico:
-        cobertura = cobertura_var.get()
-        # Aquí puedes agregar tus cálculos para el dieléctrico
+    voltage = float(voltageEntry.get())
+    hasDielectric = dielecVar.get()
+    if hasDielectric:
+        coverage = coverageVar.get()
+        # You can add your calculations for the dielectric here
 
-    # Finalmente, muestra los resultados o realiza las operaciones que desees
+    # Finally, display results or carry out desired operations
 
-        # Llamada a dibujar_capacitor
-    if tipo_capacitor == "Paralelo":
-        dibujar_capacitor(tipo_capacitor, largo=largo, ancho=ancho)
-    elif tipo_capacitor == "Esférico":
-        dibujar_capacitor(tipo_capacitor, radio_exterior=radio_exterior, radio_interior=radio_interior)
-    elif tipo_capacitor == "Cilíndrico":
-        dibujar_capacitor(tipo_capacitor, cil_radio_exterior=cil_radio_exterior, cil_radio_interior=cil_radio_interior, cil_largo=cil_largo)
+    if capacitorType == "Paralelo":
+        drawCapacitor("Paralelo", canvas, isDielectric=dielecVar.get(), coverage=coverageVar.get(), length=float(lengthEntry.get()), width=float(widthEntry.get()))
+    elif capacitorType == "Esférico":
+        drawCapacitor("Esférico", canvas, isDielectric=dielecVar.get(), coverage=coverageVar.get(), outerRadius=float(outerRadiusEntry.get()), innerRadius=float(innerRadiusEntry.get()))
+    elif capacitorType == "Cilíndrico":
+        drawCapacitor("Cilíndrico", canvas, isDielectric=dielecVar.get(), coverage=coverageVar.get(), outerRadius=float(cylOuterRadiusEntry.get()), innerRadius=float(cylInnerRadiusEntry.get()), cylLength=float(cylLengthEntry.get()))
 
-def actualizar_interfaz(tipo_var, frame_detalles, largo_label, largo_entry, ancho_label, ancho_entry, radio_ext_label, radio_ext_entry, radio_int_label, radio_int_entry, cil_radio_ext_label, cil_radio_ext_entry, cil_radio_int_label, cil_radio_int_entry, cil_largo_label, cil_largo_entry):
-   
-    tipo_capacitor = tipo_var.get()
-    for widget in frame_detalles.winfo_children():
+def updateInterface(typeVar, detailFrame, lengthLabel, lengthEntry, widthLabel, widthEntry, outerRadiusLabel, outerRadiusEntry, innerRadiusLabel, innerRadiusEntry, cylOuterRadiusLabel, cylOuterRadiusEntry, cylInnerRadiusLabel, cylInnerRadiusEntry, cylLengthLabel, cylLengthEntry):
+
+    capacitorType = typeVar.get()
+    for widget in detailFrame.winfo_children():
         widget.grid_forget()
 
-    if tipo_capacitor == "Paralelo":
-        largo_label.grid(row=0, column=0)
-        largo_entry.grid(row=0, column=1)
-        ancho_label.grid(row=1, column=0)
-        ancho_entry.grid(row=1, column=1)
+    if capacitorType == "Paralelo":
+        lengthLabel.grid(row=0, column=0)
+        lengthEntry.grid(row=0, column=1)
+        widthLabel.grid(row=1, column=0)
+        widthEntry.grid(row=1, column=1)
 
-    elif tipo_capacitor == "Esférico":
-        radio_ext_label.grid(row=0, column=0)
-        radio_ext_entry.grid(row=0, column=1)
-        radio_int_label.grid(row=1, column=0)
-        radio_int_entry.grid(row=1, column=1)
+    elif capacitorType == "Esférico":
+        outerRadiusLabel.grid(row=0, column=0)
+        outerRadiusEntry.grid(row=0, column=1)
+        innerRadiusLabel.grid(row=1, column=0)
+        innerRadiusEntry.grid(row=1, column=1)
 
-    elif tipo_capacitor == "Cilíndrico":
-        cil_radio_ext_label.grid(row=0, column=0)
-        cil_radio_ext_entry.grid(row=0, column=1)
-        cil_radio_int_label.grid(row=1, column=0)
-        cil_radio_int_entry.grid(row=1, column=1)
-        cil_largo_label.grid(row=2, column=0)
-        cil_largo_entry.grid(row=2, column=1)
+    elif capacitorType == "Cilíndrico":
+        cylOuterRadiusLabel.grid(row=0, column=0)
+        cylOuterRadiusEntry.grid(row=0, column=1)
+        cylInnerRadiusLabel.grid(row=1, column=0)
+        cylInnerRadiusEntry.grid(row=1, column=1)
+        cylLengthLabel.grid(row=2, column=0)
+        cylLengthEntry.grid(row=2, column=1)
 
-def dibujar_capacitor(tipo, canvas, es_dielelectrico=False, cobertura="Todo", **kwargs):
-    fig = plt.Figure(figsize=(5, 5))
-    ax = fig.add_subplot(111)
+def drawCapacitor(capacitorType, canvas, isDielectric=False, coverage="Todo", **kwargs):
+    fig, ax = plt.subplots(figsize=(5, 5))
 
-    if tipo == "Paralelo":
-        largo = kwargs.get("largo", 1)
-        ancho = kwargs.get("ancho", 1)
-        ax.add_patch(patches.Rectangle((0, 0), largo, ancho, fill=True))
 
-        if es_dielelectrico:
-            if cobertura == "Todo":
-                ax.add_patch(patches.Rectangle((0, 0), largo, ancho, fill=True, color='lightblue'))
-            elif cobertura == "Mitad":
-                ax.add_patch(patches.Rectangle((0, 0), largo/2, ancho, fill=True, color='lightblue'))
+    if capacitorType == "Paralelo":
+        length = kwargs.get("length", 1)
+        width = kwargs.get("width", 1)
+        
+        # Limitar el grosor de las placas a un máximo de 0.2
+        width = min(0.3, width)
+        
+        # Espacio entre las placas
+        space = 0.7
+        
+        # Coordenadas para las placas
+        top_plate_y = length/2 + space/2
+        bottom_plate_y = length/2 - width - space/2
+        
+        # Agregar las placas superior (roja) e inferior (azul)
+        ax.add_patch(patches.Rectangle((0, top_plate_y), length, width, fill=True, color='red'))
+        ax.add_patch(patches.Rectangle((0, bottom_plate_y), length, width, fill=True, color='blue'))
+        
+        # Verificar si se debe agregar el dieléctrico
+        if isDielectric:
+            if coverage == "Todo":
+                ax.add_patch(patches.Rectangle((0, bottom_plate_y + width), length, space, fill=True, color='gray'))
+            elif coverage == "Mitad":
+                ax.add_patch(patches.Rectangle((0, bottom_plate_y + width), length/2, space, fill=True, color='gray'))
 
-    elif tipo == "Esférico":
-        radio_exterior = kwargs.get("radio_exterior", 1)
-        radio_interior = kwargs.get("radio_interior", 0.7)
-        ax.add_patch(patches.Circle((0, 0), radio_exterior, fill=True, color='blue'))
-        ax.add_patch(patches.Circle((0, 0), radio_interior, fill=True, color='white'))
+    elif capacitorType == "Esférico":
+        outerRadius = kwargs.get("outerRadius", 1.3)
+        innerRadius = kwargs.get("innerRadius", 0.9)
+        
+        # Grosor de las líneas para representar las placas
+        line_width = 2
+        
+        # Agregar las placas exterior (rb) e interior (ra)
+        ax.add_patch(patches.Circle((0, 0), outerRadius, fill=False, color='black', linewidth=line_width))
+        ax.add_patch(patches.Circle((0, 0), innerRadius, fill=False, color='black', linewidth=line_width))
+        
+        if isDielectric:
+            if coverage == "Todo":
+                # Solo rellenar hasta el radio exterior, manteniendo el interior vacío
+                ax.add_patch(patches.Circle((0, 0), outerRadius, fill=True, color='gray'))
+                ax.add_patch(patches.Circle((0, 0), innerRadius, fill=True, color='white'))
+            elif coverage == "Mitad":
+                # Agregar cuña (wedge) para rellenar solo la mitad inferior entre rb y ra
+                ax.add_patch(patches.Wedge(center=(0, 0), r=outerRadius, theta1=180, theta2=360, width=outerRadius-innerRadius, color='gray'))
 
-        if es_dielelectrico:
-            if cobertura == "Todo":
-                ax.add_patch(patches.Circle((0, 0), radio_interior, fill=True, color='lightblue'))
-            elif cobertura == "Mitad":
+    elif capacitorType == "Cilíndrico":
+        outerRadius = kwargs.get("outerRadius", 1.3)
+        innerRadius = kwargs.get("innerRadius", 0.9)
+        
+        # Grosor de las líneas para representar las placas
+        line_width = 2
+        
+        # Agregar las placas exterior (rb) e interior (ra)
+        ax.add_patch(patches.Circle((0, 0), outerRadius, fill=False, color='black', linewidth=line_width))
+        ax.add_patch(patches.Circle((0, 0), innerRadius, fill=False, color='black', linewidth=line_width))
+        
+        if isDielectric:
+            if coverage == "Todo":
+                # Solo rellenar hasta el radio exterior, manteniendo el interior vacío
+                ax.add_patch(patches.Circle((0, 0), outerRadius, fill=True, color='gray'))
+                ax.add_patch(patches.Circle((0, 0), innerRadius, fill=True, color='white'))
+            elif coverage == "Mitad":
+                # Agregar cuña (wedge) para rellenar solo la mitad inferior entre rb y ra
+                ax.add_patch(patches.Wedge(center=(0, 0), r=outerRadius, theta1=180, theta2=360, width=outerRadius-innerRadius, color='gray'))
 
-    elif tipo == "Cilíndrico":
-        cil_radio_exterior = kwargs.get("cil_radio_exterior", 1)
-        cil_radio_interior = kwargs.get("cil_radio_interior", 0.7)
-        cil_largo = kwargs.get("cil_largo", 3)
-        ax.add_patch(patches.Rectangle((-cil_largo/2, -cil_radio_exterior), cil_largo, 2*cil_radio_exterior, fill=True, color='blue'))
-        ax.add_patch(patches.Rectangle((-cil_largo/2, -cil_radio_interior), cil_largo, 2*cil_radio_interior, fill=True, color='white'))
-
-        if es_dielelectrico:
-            if cobertura == "Todo":
-                ax.add_patch(patches.Rectangle((-cil_largo/2, -cil_radio_interior), cil_largo, 2*cil_radio_interior, fill=True, color='lightblue'))
-            elif cobertura == "Mitad":
-            
     ax.set_aspect('equal')
     ax.autoscale_view()
     plt.axis('off')
 
     for widget in canvas.winfo_children():
         widget.destroy()
-    
+
     chart = FigureCanvasTkAgg(fig, canvas)
     chart.get_tk_widget().pack()
 
@@ -131,66 +162,63 @@ def main():
     # Centrar el título y hacerlo negrita
     ttk.Label(app, text="Calculadora de Capacitores", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=20)
 
-    tipo_var = ttk.Combobox(app, values=["Paralelo", "Esférico", "Cilíndrico"])
-    tipo_var.grid(row=1, column=1, pady=10)
+    typeVar = ttk.Combobox(app, values=["Paralelo", "Esférico", "Cilíndrico"])
+    typeVar.grid(row=1, column=1, pady=10)
     ttk.Label(app, text="Tipo de capacitor:").grid(row=1, column=0, pady=10, sticky=tk.W)
 
-    frame_detalles = ttk.Frame(app)
-    frame_detalles.grid(row=2, column=0, columnspan=2, pady=10)
+    detailFrame = ttk.Frame(app)
+    detailFrame.grid(row=2, column=0, columnspan=2, pady=10)
 
     # Widgets para capacitor paralelo
-    largo_label = ttk.Label(frame_detalles, text="Largo:")
-    largo_entry = ttk.Entry(frame_detalles)
-    ancho_label = ttk.Label(frame_detalles, text="Ancho:")
-    ancho_entry = ttk.Entry(frame_detalles)
+    lengthLabel = ttk.Label(detailFrame, text="Largo (m):")
+    lengthEntry = ttk.Entry(detailFrame)
+    widthLabel = ttk.Label(detailFrame, text="Ancho (m):")
+    widthEntry = ttk.Entry(detailFrame)
 
     # Widgets para capacitor esférico
-    radio_ext_label = ttk.Label(frame_detalles, text="Radio exterior:")
-    radio_ext_entry = ttk.Entry(frame_detalles)
-    radio_int_label = ttk.Label(frame_detalles, text="Radio interior:")
-    radio_int_entry = ttk.Entry(frame_detalles)
+    outerRadiusLabel = ttk.Label(detailFrame, text="Radio exterior (m):")
+    outerRadiusEntry = ttk.Entry(detailFrame)
+    innerRadiusLabel = ttk.Label(detailFrame, text="Radio interior (m):")
+    innerRadiusEntry = ttk.Entry(detailFrame)
 
     # Widgets para capacitor cilíndrico
-    cil_radio_ext_label = ttk.Label(frame_detalles, text="Radio exterior:")
-    cil_radio_ext_entry = ttk.Entry(frame_detalles)
-    cil_radio_int_label = ttk.Label(frame_detalles, text="Radio interior:")
-    cil_radio_int_entry = ttk.Entry(frame_detalles)
-    cil_largo_label = ttk.Label(frame_detalles, text="Largo:")
-    cil_largo_entry = ttk.Entry(frame_detalles)
+    cylOuterRadiusLabel = ttk.Label(detailFrame, text="Radio exterior (m):")
+    cylOuterRadiusEntry = ttk.Entry(detailFrame)
+    cylInnerRadiusLabel = ttk.Label(detailFrame, text="Radio interior (m):")
+    cylInnerRadiusEntry = ttk.Entry(detailFrame)
+    cylLengthLabel = ttk.Label(detailFrame, text="Largo (m):")
+    cylLengthEntry = ttk.Entry(detailFrame)
 
-    ttk.Label(app, text="Voltaje:").grid(row=3, column=0, pady=10, sticky=tk.W)
-    voltaje_entry = ttk.Entry(app)
-    voltaje_entry.grid(row=3, column=1, pady=10)
+    ttk.Label(app, text="Voltaje (V):").grid(row=3, column=0, pady=10, sticky=tk.W)
+    voltageEntry = ttk.Entry(app)
+    voltageEntry.grid(row=3, column=1, pady=10)
 
-    diel_var = tk.BooleanVar()
+    dielecVar = tk.BooleanVar()
 
-    cobertura_label = ttk.Label(app, text="Cobertura del dieléctrico:")
-    cobertura_var = ttk.Combobox(app, values=["Todo", "Mitad"])
+    coverageLabel = ttk.Label(app, text="Cobertura del dieléctrico:")
+    coverageVar = ttk.Combobox(app, values=["Todo", "Mitad"])
 
     def mostrar_cobertura(*args):
-        if diel_var.get():
-            cobertura_label.grid(row=6, column=0, pady=10, sticky=tk.W)
-            cobertura_var.grid(row=6, column=1, pady=10)
+        if dielecVar.get():
+            coverageLabel.grid(row=6, column=0, pady=10, sticky=tk.W)
+            coverageVar.grid(row=6, column=1, pady=10)
         else:
-            cobertura_label.grid_forget()
-            cobertura_var.grid_forget()
+            coverageLabel.grid_forget()
+            coverageVar.grid_forget()
 
-    diel_var.trace_add("write", mostrar_cobertura)
-    ttk.Checkbutton(app, text="¿Usar dieléctrico?", variable=diel_var).grid(row=5, column=0, columnspan=2, pady=10)
-
-
-    def combined_functions(event):
-        actualizar_interfaz(tipo_var, frame_detalles, largo_label, largo_entry, ancho_label, ancho_entry, radio_ext_label, radio_ext_entry, radio_int_label, radio_int_entry, cil_radio_ext_label, cil_radio_ext_entry, cil_radio_int_label, cil_radio_int_entry, cil_largo_label, cil_largo_entry)
-        obtener_datos(tipo_var, largo_entry, ancho_entry, radio_ext_entry, radio_int_entry, cil_radio_ext_entry, cil_radio_int_entry, cil_largo_entry, voltaje_entry, diel_var, cobertura_var)
-
-
-    tipo_var.bind("<<ComboboxSelected>>", combined_functions)
-
-    ttk.Button(app, text="Calcular", command=lambda: obtener_datos(tipo_var, largo_entry, ancho_entry, radio_ext_entry, radio_int_entry, pendiente_entry, voltaje_entry, diel_var, cobertura_var)).grid(row=7, column=0, columnspan=2, pady=10)
+    dielecVar.trace_add("write", mostrar_cobertura)
+    ttk.Checkbutton(app, text="¿Usar dieléctrico?", variable=dielecVar).grid(row=5, column=0, columnspan=2, pady=10)
 
     canvas = tk.Canvas(app)
     canvas.grid(row=8, column=0, columnspan=2, pady=10)
 
+    def combined_functions(event):
+        updateInterface(typeVar, detailFrame, lengthLabel, lengthEntry, widthLabel, widthEntry, outerRadiusLabel, outerRadiusEntry, innerRadiusLabel, innerRadiusEntry, cylOuterRadiusLabel, cylOuterRadiusEntry, cylInnerRadiusLabel,  cylInnerRadiusEntry, cylLengthLabel,  cylLengthEntry)
+        getData(typeVar, canvas, lengthEntry, widthEntry, outerRadiusEntry, innerRadiusEntry, cylOuterRadiusEntry,  cylInnerRadiusEntry,  cylLengthEntry, voltageEntry, dielecVar, coverageVar)
+    
+    typeVar.bind("<<ComboboxSelected>>", combined_functions)
+
+    ttk.Button(app, text="Calcular", command=lambda: combined_functions(None)).grid(row=7, column=0, columnspan=2, pady=10)
 
     app.mainloop()
 
