@@ -43,6 +43,15 @@ PI = math.pi
 
 def getData(typeVar, canvas, lengthEntry, widthEntry, platesDistanceEntry, outerRadiusEntry, innerRadiusEntry, cylOuterRadiusEntry, cylInnerRadiusEntry, cylLengthEntry, voltageEntry, dielecVar, coverageVar):
     capacitorType = typeVar.get()
+
+    try:
+        voltage = float(voltageEntry.get())
+    except ValueError:
+        # Handle the case where the input is not a valid float
+        resultsLabel.config(text="")
+        return
+
+
     if capacitorType == "Parallel":
         length = float(lengthEntry.get()) if lengthEntry.get() else 0.0
         width = float(widthEntry.get()) if widthEntry.get() else 0.0
@@ -165,6 +174,10 @@ def calculateParallelPlates(plateLength, plateWidth, platesD, dielectricDist,  e
     initialCapacitance = (epsilonZero * (plateLength) * plateWidth)/(platesD)
     capacitorCharge = initialCapacitance * entVoltage
 
+    # Rounding
+    initialCapacitance = round(initialCapacitance, 15)
+    capacitorCharge = round(capacitorCharge, 15)
+
     if(dielectricDist == "Half"):
         initialCapacitanceHalf = (epsilonZero * (plateLength/2) * plateWidth)/(platesD)
         dielectricCapacitance = initialCapacitanceHalf * dielectricConstant
@@ -174,7 +187,14 @@ def calculateParallelPlates(plateLength, plateWidth, platesD, dielectricDist,  e
         freeChargeDielectric = freeChargeAir * dielectricConstant
         boundChargeDielectric = freeChargeDielectric * (1-(1/dielectricConstant))
         
-        resultsLabel.config(text = "Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor {}\nCarga Libre Aire: {} \nCarga Libre Dielectrico: {} \nCarga Ligada Dielectrico: {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir, freeChargeDielectric, boundChargeDielectric))
+        # Rounding
+        equivalentCapacitance = round(equivalentCapacitance, 15)
+        capacitorEnergy = round(capacitorEnergy, 15)
+        freeChargeAir = round(freeChargeAir, 15)
+        freeChargeDielectric = round(freeChargeDielectric, 15)
+        boundChargeDielectric = round(boundChargeDielectric, 15)
+
+        resultsLabel.config(text = "Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Air: {} \nFree Charge Dielectric (Plexiglass): {} \nBound Charge Dielectric (Plexiglass): {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir, freeChargeDielectric, boundChargeDielectric))
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
@@ -182,16 +202,30 @@ def calculateParallelPlates(plateLength, plateWidth, platesD, dielectricDist,  e
         freeChargeDielectric = (capacitorCharge)/(plateLength*plateWidth)
         boundChargeDielectric = freeChargeDielectric * (1-(1/dielectricConstant))
 
-        resultsLabel.config(text = "Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor {}\nCarga Libre Dielectrico: {} \nCarga Ligada Dielectrico: {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy,freeChargeDielectric, boundChargeDielectric))
+        # Rounding
+        dielectricCapacitance = round(dielectricCapacitance, 15)
+        capacitorEnergy = round(capacitorEnergy, 15)
+        freeChargeDielectric = round(freeChargeDielectric, 15)
+        boundChargeDielectric = round(boundChargeDielectric, 15)
+
+        resultsLabel.config(text = "Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Dielectric (Plexiglass): {} \nBound Charge Dielectric (Plexiglass): {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy,freeChargeDielectric, boundChargeDielectric))
     else:
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        resultsLabel.config(text = "Capacitancia Equivalente: {}\n Carga del Capacitor: {} \nEnergia del Capacitor: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
+
+        # Rounding
+        capacitorEnergy = round(capacitorEnergy, 15)
+
+        resultsLabel.config(text = "Equivalent Capacitance: {}\nCapacitor Charge: {} \nCapacitor Energy: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
 
 
 def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
 
     initialCapacitance = 4*PI*epsilonZero*((smallRad*bigRad)/(bigRad - smallRad))
     capacitorCharge = initialCapacitance * entVoltage
+
+    # Rounding
+    initialCapacitance = round(initialCapacitance, 15)
+    capacitorCharge = round(capacitorCharge, 15)
 
 
     if(dielectricDist == "Half"):
@@ -208,7 +242,17 @@ def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
 
-        resultsLabel.config(text ="Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor {}\nCarga Libre Aire Ra: {} \nCarga Libre Aire Rb: {} \nCarga Libre Dielectrico Ra: {} \nCarga Libre Dielectrico Rb: {} \nCarga Ligada Dielectrico Ra: {} \nCarga Ligada Dielectrico Rb: {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir_smallRadius, freeChargeAir_bigRadius, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
+        # Rounding
+        equivalentCapacitance = round(equivalentCapacitance, 15)
+        capacitorEnergy =  round(capacitorEnergy, 15)
+        freeChargeAir_smallRadius = round(freeChargeAir_smallRadius, 15)
+        freeChargeAir_bigRadius =  round(freeChargeAir_bigRadius, 15)
+        freeChargeDielectric_smallRadius = round(freeChargeDielectric_smallRadius, 15)
+        freeChargeDielectric_bigRadius = round(freeChargeDielectric_bigRadius, 15)
+        boundChargeDielectric_smallRadius = round(boundChargeDielectric_smallRadius, 15)
+        boundChargeDielectric_bigRadius = round(boundChargeDielectric_bigRadius, 15)
+
+        resultsLabel.config(text ="Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Air Ra: {} \nFree Charge Air Rb: {} \nFree Charge Dielectric Ra (Plexiglass): {} \nFree Charge Dielectric Rb (Plexiglass): {} \nBound Charge Dielectric Ra (Plexiglass): {} \nBound Charge Dielectric Rb (Plexiglass): {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir_smallRadius, freeChargeAir_bigRadius, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
@@ -220,11 +264,22 @@ def calculateConcentricSpheres(smallRad, bigRad, dielectricDist, entVoltage):
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
 
-        resultsLabel.config(text ="Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor {}\nCarga Libre Dielectrico Ra: {} \nCarga Libre Dielectrico Rb: {} \nCarga Ligada Dielectrico Ra: {} \nCarga Ligada Dielectrico Rb: {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
+        # Rounding
+        capacitorEnergy =  round(capacitorEnergy, 15)
+        freeChargeDielectric_smallRadius = round(freeChargeDielectric_smallRadius, 15)
+        freeChargeDielectric_bigRadius = round(freeChargeDielectric_bigRadius, 15)
+        boundChargeDielectric_smallRadius = round(boundChargeDielectric_smallRadius, 15)
+        boundChargeDielectric_bigRadius = round(boundChargeDielectric_bigRadius, 15)
+
+        resultsLabel.config(text ="Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Dielectric Ra (Plexiglass): {} \nFree Charge Dielectric Rb (Plexiglass): {} \nBound Charge Dielectric Ra (Plexiglass): {} \nBound Charge Dielectric Rb (Plexiglass): {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
 
     else:
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        resultsLabel.config(text ="\n\nCapacitancia Equivalente: {}\nCarga del Capacitor: {} \nEnergia del Capacitor: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
+
+        # Rounding
+        capacitorEnergy = round(capacitorEnergy, 15)
+
+        resultsLabel.config(text ="\n\nEquivalent Capacitance: {}\nCapacitor Charge: {} \nCapacitor Energy: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
 
 
 def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage):
@@ -232,7 +287,10 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
     initialCapacitance = (2*PI*epsilonZero*cylLength)/(math.log(outerRad/innerRad))
     capacitorCharge = initialCapacitance * entVoltage
 
-    
+    # Rounding
+    initialCapacitance = round(initialCapacitance, 15)
+    capacitorCharge = round(capacitorCharge, 15)
+
     if(dielectricDist == "Half"):
         initialCapacitanceHalf = 0.5 * initialCapacitance
         dielectricCapacitance = initialCapacitanceHalf * dielectricConstant
@@ -247,7 +305,19 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
         
-        resultsLabel.config(text ="Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor: {}\nCarga Libre Aire Ra: {} \nCarga Libre Aire Rb: {} \nCarga Libre Dielectrico Ra: {} \nCarga Libre Dielectrico Rb: {} \nCarga Ligada Dielectrico Ra: {} \nCarga Ligada Dielectrico Rb: {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir_smallRadius, freeChargeAir_bigRadius, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
+        # Rounding
+        equivalentCapacitance = round(equivalentCapacitance, 15)
+        capacitorEnergy =  round(capacitorEnergy, 15)
+        freeChargeAir_smallRadius = round(freeChargeAir_smallRadius, 15)
+        freeChargeAir_bigRadius =  round(freeChargeAir_bigRadius, 15)
+        freeChargeDielectric_smallRadius = round(freeChargeDielectric_smallRadius, 15)
+        freeChargeDielectric_bigRadius = round(freeChargeDielectric_bigRadius, 15)
+        boundChargeDielectric_smallRadius = round(boundChargeDielectric_smallRadius, 15)
+        boundChargeDielectric_bigRadius = round(boundChargeDielectric_bigRadius, 15)
+
+
+
+        resultsLabel.config(text ="Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Air Ra: {} \nFree Charge Air Rb: {} \nFree Charge Dielectric Ra (Plexiglass): {} \nFree Charge Dielectric Rb (Plexiglass): {} \nBound Charge Dielectricc Ra (Plexiglass): {} \nBound Charge Dielectric Rb (Plexiglass): {}\n".format(equivalentCapacitance, capacitorCharge, capacitorEnergy, freeChargeAir_smallRadius, freeChargeAir_bigRadius, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
 
     elif(dielectricDist == "Full"):
         dielectricCapacitance = initialCapacitance * dielectricConstant
@@ -258,11 +328,18 @@ def calculateCylinder(innerRad, outerRad, cylLength, dielectricDist, entVoltage)
         boundChargeDielectric_smallRadius = freeChargeDielectric_smallRadius * (1-(1/dielectricConstant))
         boundChargeDielectric_bigRadius = freeChargeDielectric_bigRadius * (1-(1/dielectricConstant))
 
-        resultsLabel.config(text ="Capacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia del Capacitor: {}\nCarga Libre Dielectrico Ra: {} \nCarga Libre Dielectrico Rb: {} \nCarga Ligada Dielectrico Ra: {} \nCarga Ligada Dielectrico Rb: {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
+        # Rounding
+        capacitorEnergy =  round(capacitorEnergy, 15)
+        freeChargeDielectric_smallRadius = round(freeChargeDielectric_smallRadius, 15)
+        freeChargeDielectric_bigRadius = round(freeChargeDielectric_bigRadius, 15)
+        boundChargeDielectric_smallRadius = round(boundChargeDielectric_smallRadius, 15)
+        boundChargeDielectric_bigRadius = round(boundChargeDielectric_bigRadius, 15)
+        
+        resultsLabel.config(text ="Equivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\nFree Charge Dielectric Ra (Plexiglass): {} \nFree Charge Dielectric Rb (Plexiglass): {} \nBound Charge Dielectric Ra (Plexiglass): {} \nBound Charge Dielectric Rb (Plexiglass): {}\n".format(dielectricCapacitance, capacitorCharge, capacitorEnergy, freeChargeDielectric_smallRadius, freeChargeDielectric_bigRadius, boundChargeDielectric_smallRadius, boundChargeDielectric_bigRadius))
 
     else:
         capacitorEnergy = (0.5) * initialCapacitance * (entVoltage*entVoltage)
-        resultsLabel.config(text ="\n\nCapacitancia Equivalente: {} \nCarga del Capacitor: {} \nEnergia Almacenada: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
+        resultsLabel.config(text ="\n\nEquivalent Capacitance: {} \nCapacitor Charge: {} \nCapacitor Energy: {}\n".format(initialCapacitance, capacitorCharge, capacitorEnergy))
 
 
 def main():
@@ -270,7 +347,8 @@ def main():
     global resultsLabel
 
     content_frame = tk.Tk()
-    content_frame.title("Calculadora de Capacitores")
+    content_frame.title("Physical Properties Of A Capacitor")
+    content_frame.geometry("720x1000")
 
     mainframe = ttk.Frame(content_frame)
     mainframe.pack(fill=tk.BOTH, expand=True)
@@ -288,44 +366,44 @@ def main():
     canvas.create_window((0,0), window=content_frame, anchor=tk.NW)
 
     # Centrar el título y hacerlo negrita
-    ttk.Label(content_frame, text="Calculadora de Capacitores", font=("Arial", 12, "bold")).grid(row=0, column=0, columnspan=2, pady=20)
+    ttk.Label(content_frame, text="Physical Properties Of A Capacitor", font=("Times New Roman", 14, "bold")).grid(row=0, column=0, columnspan=2, pady=20)
 
     typeVar = ttk.Combobox(content_frame, values=["Parallel", "Spherical", "Cylindric"])
     typeVar.grid(row=1, column=1, pady=10)
-    ttk.Label(content_frame, text="Tipo de capacitor:").grid(row=1, column=0, pady=10, sticky=tk.W)
+    ttk.Label(content_frame, text="Select Capacitor Type:").grid(row=1, column=0, pady=10, sticky=tk.W)
 
     detailFrame = ttk.Frame(content_frame)
     detailFrame.grid(row=2, column=0, columnspan=2, pady=10)
 
     # Widgets para capacitor Parallel
-    lengthLabel = ttk.Label(detailFrame, text="Largo de las placas (m):")
+    lengthLabel = ttk.Label(detailFrame, text="Plates Length (m):")
     lengthEntry = ttk.Entry(detailFrame)
-    widthLabel = ttk.Label(detailFrame, text="Ancho de las placas (m):")
+    widthLabel = ttk.Label(detailFrame, text="Plates Width (m):")
     widthEntry = ttk.Entry(detailFrame)
-    platesDistanceLabel = ttk.Label(detailFrame, text="Distancia entre placas (m):")
+    platesDistanceLabel = ttk.Label(detailFrame, text="Plates Separation Distance (m):")
     platesDistanceEntry = ttk.Entry(detailFrame)
 
     # Widgets para capacitor Spherical
-    outerRadiusLabel = ttk.Label(detailFrame, text="Radio exterior (A) (m):")
+    outerRadiusLabel = ttk.Label(detailFrame, text="Outer Radius (A) (m):")
     outerRadiusEntry = ttk.Entry(detailFrame)
-    innerRadiusLabel = ttk.Label(detailFrame, text="Radio interior (B) (m):")
+    innerRadiusLabel = ttk.Label(detailFrame, text="Inner Radius (B) (m):")
     innerRadiusEntry = ttk.Entry(detailFrame)
 
     # Widgets para capacitor Cylindric
-    cylOuterRadiusLabel = ttk.Label(detailFrame, text="Radio exterior (A) (m):")
+    cylOuterRadiusLabel = ttk.Label(detailFrame, text="Outer Radius (A) (m):")
     cylOuterRadiusEntry = ttk.Entry(detailFrame)
-    cylInnerRadiusLabel = ttk.Label(detailFrame, text="Radio interior (B) (m):")
+    cylInnerRadiusLabel = ttk.Label(detailFrame, text="Inner Radius (B) (m):")
     cylInnerRadiusEntry = ttk.Entry(detailFrame)
-    cylLengthLabel = ttk.Label(detailFrame, text="Largo del cilindro (m):")
+    cylLengthLabel = ttk.Label(detailFrame, text="Cylinder Length (m):")
     cylLengthEntry = ttk.Entry(detailFrame)
 
-    ttk.Label(content_frame, text="Voltaje a utilizar (V):").grid(row=3, column=0, pady=10, sticky=tk.W)
+    ttk.Label(content_frame, text="Entry Voltage (V):").grid(row=3, column=0, pady=10, sticky=tk.W)
     voltageEntry = ttk.Entry(content_frame)
     voltageEntry.grid(row=3, column=1, pady=10)
 
     dielecVar = tk.BooleanVar()
 
-    coverageLabel = ttk.Label(content_frame, text="Cobertura del dieléctrico:")
+    coverageLabel = ttk.Label(content_frame, text="Dielectric Coverage:")
     coverageVar = ttk.Combobox(content_frame, values=["Full", "Half"])
 
     def mostrar_cobertura(*args):
@@ -337,10 +415,10 @@ def main():
             coverageVar.grid_forget()
 
     dielecVar.trace_add("write", mostrar_cobertura)
-    ttk.Checkbutton(content_frame, text="¿Usar dieléctrico?", variable=dielecVar).grid(row=4, column=0, columnspan=2, pady=10)
+    ttk.Checkbutton(content_frame, text="Use dielectric?", variable=dielecVar).grid(row=4, column=0, columnspan=2, pady=10)
 
 
-    ttk.Label(content_frame, text="Resultados de propiedades físicas calculadas", font=("Arial", 9, "bold")).grid(row=7, column=0, columnspan=2, pady=10)
+    ttk.Label(content_frame, text="Physic Properties Calculated", font=("Times New Roman", 12, "bold")).grid(row=7, column=0, columnspan=2, pady=10)
     resultsLabel = tk.Label(content_frame, wraplength=700)
     resultsLabel.grid(row=8, column=0, columnspan=2, pady=10)
 
@@ -381,7 +459,7 @@ def main():
     
     typeVar.bind("<<ComboboxSelected>>", combined_functions)
 
-    ttk.Button(content_frame, text="Calcular", command=lambda: combined_functions(None)).grid(row=6, column=0, columnspan=2, pady=10)
+    ttk.Button(content_frame, text="Calculate!", command=lambda: combined_functions(None)).grid(row=6, column=0, columnspan=2, pady=10)
 
     content_frame.mainloop()
 
